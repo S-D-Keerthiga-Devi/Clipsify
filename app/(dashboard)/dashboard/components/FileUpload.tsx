@@ -1,25 +1,19 @@
 "use client" // This component must be a client component
 
-import {
-    ImageKitAbortError,
-    ImageKitInvalidRequestError,
-    ImageKitServerError,
-    ImageKitUploadNetworkError,
-    upload,
-} from "@imagekit/next";
-import { useRef, useState } from "react";
+import { upload } from "@imagekit/next";
+import { useState } from "react";
 import { Upload } from "lucide-react"; // Make sure to import the Upload icon
 
 interface FileUploadProps {
-    onSuccess: (res: any) => void
-    onProgress?: (progress: number) => void
-    fileType?: "image" | "video"
+    fileType: "image" | "video";
+    onSuccess: (response: { url: string; fileId: string }) => void;
+    onError: (error: Error) => void;
 }
 
 // UploadExample component demonstrates file uploading using ImageKit's Next.js SDK.
 const FileUpload = ({
     onSuccess,
-    onProgress,
+    onError,
     fileType
 }: FileUploadProps) => {
     const [uploading, setUploading] = useState(false)
@@ -68,16 +62,21 @@ const FileUpload = ({
                 fileName: file.name,
                 // Remove any transformations
                 onProgress: (event) => {
-                    if (event.lengthComputable && onProgress) {
+                    if (event.lengthComputable) {
                         const percent = (event.loaded / event.total) * 100;
-                        onProgress(Math.round(percent))
+                        console.log('Upload progress:', Math.round(percent));
                     }
                 },
             });
 
-            onSuccess(res)
+            if (res.url) {
+                onSuccess({ url: res.url, fileId: res.fileId || '' });
+            } else {
+                onError(new Error("Upload failed: No URL returned"));
+            }
         } catch (error) {
             console.error("Upload Failed", error)
+            onError(error instanceof Error ? error : new Error("Upload failed"))
             setError("Upload failed. Please try again.")
         } finally {
             setUploading(false)

@@ -1,13 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import ImageKit from "imagekit";
 
-const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY!,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
-  urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT!,
-});
+// Initialize ImageKit only if environment variables are available
+const getImageKit = () => {
+  if (!process.env.IMAGEKIT_PUBLIC_KEY || !process.env.IMAGEKIT_PRIVATE_KEY || !process.env.NEXT_PUBLIC_URL_ENDPOINT) {
+    return null;
+  }
+
+  return new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: process.env.NEXT_PUBLIC_URL_ENDPOINT,
+  });
+};
 
 export async function POST(req: NextRequest) {
+  const imagekit = getImageKit();
+
+  if (!imagekit) {
+    return NextResponse.json(
+      { error: "ImageKit configuration missing" },
+      { status: 500 }
+    );
+  }
+
   try {
     const body = await req.json();
     const { videoUrl } = body;
@@ -51,11 +67,12 @@ export async function POST(req: NextRequest) {
       publicUrl
     });
 
-  } catch (err: any) {
-    console.error("Error generating public URL:", err);
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error("Error generating public URL:", error);
     return NextResponse.json({
       error: "Failed to generate public URL",
-      details: err.message
+      details: error.message
     }, { status: 500 });
   }
 }

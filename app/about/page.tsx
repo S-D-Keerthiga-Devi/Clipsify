@@ -1,10 +1,8 @@
 "use client"
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Clapperboard, Video, Image as ImageIcon, BarChart3, Sparkles, Rocket, Shield, Star } from "lucide-react";
 import NavbarMain from "../components/NavbarMain";
-import Footer from "../components/Footer";
 
 export default function AboutPage() {
     const router = useRouter();

@@ -66,11 +66,6 @@ export default function NavbarMain() {
   const { data: session } = useSession()
   const user = session?.user;
 
-  // Hide navbar on dashboard routes
-  if (pathname?.startsWith('/dashboard')) {
-    return null
-  }
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,6 +82,12 @@ export default function NavbarMain() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openProfile]);
+
+  const isDashboard = pathname?.startsWith('/dashboard')
+
+  if (isDashboard) {
+    return null
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0A0A0F]/80 backdrop-blur-xl border-b border-purple-500/20">

@@ -3,20 +3,20 @@ import { IVideo } from "@/models/Video"
 export type VideoFormData = Omit<IVideo, "_id">
 
 type FetchOptions = {
-    method? : "GET" | "POST" | "PUT" | "DELETE"
-    body? : any
-    headers? : Record<string, string> 
+    method?: "GET" | "POST" | "PUT" | "DELETE"
+    body?: unknown
+    headers?: Record<string, string>
 }
 
 class ApiClient {
     private async fetch<T>(
         endpoint: string,
         options: FetchOptions = {}
-    ) : Promise<T> {
-        const {method = "GET", body, headers = {}} = options
+    ): Promise<T> {
+        const { method = "GET", body, headers = {} } = options
 
         const defaultHeaders = {
-            "Content-Type" : "application/json",
+            "Content-Type": "application/json",
             ...headers,
         }
 
@@ -26,18 +26,18 @@ class ApiClient {
             body: body ? JSON.stringify(body) : undefined
         })
 
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error(await response.text())
         }
 
         return response.json()
     }
 
-    async getVideos(){
+    async getVideos() {
         return this.fetch("/videos")
     }
 
-    async createVideo(videoData : VideoFormData){
+    async createVideo(videoData: VideoFormData) {
         return this.fetch("/videos", {
             method: "POST",
             body: videoData

@@ -147,10 +147,17 @@ export const authOptions: NextAuthOptions = {
                 session.user.id = token.id as string
                 session.user.email = token.email as string;
                 session.user.name = token.name as string;
-                (session.user as any).profileCompleted = token.profileCompleted;
-                (session.user as any).bio = token.bio;
-                (session.user as any).location = token.location;
-                (session.user as any).image = token.image;
+                // Extend session user with additional properties
+                const extendedUser = session.user as typeof session.user & {
+                    profileCompleted?: boolean;
+                    bio?: string;
+                    location?: string;
+                    image?: string;
+                };
+                extendedUser.profileCompleted = token.profileCompleted as boolean | undefined;
+                extendedUser.bio = token.bio as string | undefined;
+                extendedUser.location = token.location as string | undefined;
+                extendedUser.image = token.image as string | undefined;
             }
             return session
         },

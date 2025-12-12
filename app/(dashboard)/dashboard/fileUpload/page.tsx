@@ -16,6 +16,35 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Upload, Image, Video, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 import { useSession } from "next-auth/react";
 
+// Type definitions for payloads
+interface ImagePayload {
+  title: string;
+  description: string;
+  postedBy: {
+    id: string;
+    name: string | null | undefined;
+    email: string | null | undefined;
+  };
+  imageUrl: string;
+  transformation: {
+    width: number;
+    height: number;
+    quality: number;
+  };
+}
+
+interface VideoPayload {
+  title: string;
+  description: string;
+  postedBy: {
+    id: string;
+    name: string | null | undefined;
+    email: string | null | undefined;
+  };
+  videoUrl: string;
+  thumbnailUrl: string;
+}
+
 const FileUploadpage = () => {
   const [activeTab, setActiveTab] = useState<"image" | "video">("image")
   const [uploadResponse, setUploadResponse] = useState<any>(null)
@@ -28,7 +57,7 @@ const FileUploadpage = () => {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const handleUpload = async (res: any) => {
+  const handleImageUploadSuccess = async (res: { url: string; fileId: string }) => {
     if (!user) {
       setMessage("You must be logged in to upload files.");
       setMessageType("error");
@@ -36,11 +65,11 @@ const FileUploadpage = () => {
     }
 
     setIsUploading(true)
-    setMessage("Saving file details to database...")
+    setMessage("Saving image details to database...")
     setMessageType("info")
 
     try {
-      let payload: any = {
+      const payload: ImagePayload = {
         title,
         description,
         postedBy: {
@@ -48,26 +77,15 @@ const FileUploadpage = () => {
           name: user.name,
           email: user.email,
         },
-      };
-      let endpoint = ""
-
-      if (activeTab === "image") {
-        payload.imageUrl = res.url;
-        payload.transformation = {
+        imageUrl: res.url,
+        transformation: {
           width: 1080,
           height: 1920,
           quality: 100,
-        };
-        endpoint = "/api/image";
-      } else {
-        // Use the URL directly from the response
-        payload.videoUrl = res.url;
-        // Don't use any transformations for the thumbnail
-        payload.thumbnailUrl = res.url;
-        endpoint = "/api/video";
-      }
+        },
+      };
 
-      const response = await fetch(endpoint, {
+      const response = await fetch("/api/image", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -76,12 +94,10 @@ const FileUploadpage = () => {
       })
 
       if (!response.ok) {
-        throw new Error("Failed to save file metadata")
+        throw new Error("Failed to save image metadata")
       }
 
-      setMessage(
-        `${activeTab === "image" ? "Image" : "Video"} uploaded successfully!`
-      );
+      setMessage("Image uploaded successfully!");
       setMessageType("success")
       setUploadResponse(res)
 
@@ -90,12 +106,75 @@ const FileUploadpage = () => {
       setDescription("")
 
     } catch (error) {
-      console.log("error saving file:", error)
-      setMessage("Failed to save file. Please try again.")
+      console.log("error saving image:", error)
+      setMessage("Failed to save image. Please try again.")
       setMessageType("error")
     } finally {
       setIsUploading(false)
     }
+  }
+
+  const handleVideoUploadSuccess = async (res: { url: string; fileId: string }) => {
+    if (!user) {
+      setMessage("You must be logged in to upload files.");
+      setMessageType("error");
+      return;
+    }
+
+    setIsUploading(true)
+    setMessage("Saving video details to database...")
+    setMessageType("info")
+
+    try {
+      const payload: VideoPayload = {
+        title,
+        description,
+        postedBy: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+        videoUrl: res.url,
+        thumbnailUrl: res.url,
+      };
+
+      const response = await fetch("/api/video", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save video metadata")
+      }
+
+      setMessage("Video uploaded successfully!");
+      setMessageType("success")
+      setUploadResponse(res)
+
+      // Clear form
+      setTitle("")
+      setDescription("")
+
+    } catch (error) {
+      console.log("error saving video:", error)
+      setMessage("Failed to save video. Please try again.")
+      setMessageType("error")
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleImageUploadError = (error: Error) => {
+    setMessage(`Image upload failed: ${error.message}`);
+    setMessageType("error");
+  }
+
+  const handleVideoUploadError = (error: Error) => {
+    setMessage(`Video upload failed: ${error.message}`);
+    setMessageType("error");
   }
 
   return (
@@ -185,7 +264,8 @@ const FileUploadpage = () => {
                 <div className="pt-2">
                   <FileUpload
                     fileType="image"
-                    onSuccess={handleUpload}
+                    onSuccess={handleImageUploadSuccess}
+                    onError={handleImageUploadError}
                   />
                 </div>
               </TabsContent>
@@ -224,7 +304,8 @@ const FileUploadpage = () => {
                 <div className="pt-2">
                   <FileUpload
                     fileType="video"
-                    onSuccess={handleUpload}
+                    onSuccess={handleVideoUploadSuccess}
+                    onError={handleVideoUploadError}
                   />
                 </div>
               </TabsContent>
