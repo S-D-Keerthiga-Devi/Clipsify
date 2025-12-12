@@ -1,7 +1,7 @@
 "use client"
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent } from "@/components/ui/tabs"
 
-function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -271,7 +271,7 @@ function LoginPage() {
 
           {/* Sign Up Link - Outside tabs, at bottom */}
           <p className="text-center text-gray-400 text-sm mt-1">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Button
               variant="link"
               className="text-purple-400 hover:text-purple-300 font-semibold p-0 h-auto cursor-pointer"
@@ -286,4 +286,14 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0A0A0F] via-[#12121A] to-[#0A0A0F]">
+        <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
+  )
+}
