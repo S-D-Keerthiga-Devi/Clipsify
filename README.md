@@ -175,72 +175,6 @@ reels-platform/
 2. Create a new OAuth App
 3. Set Authorization callback URL: `https://clipsify-keerthiga.vercel.app/api/auth/callback/github`
 
-## 🚢 Deployment
-
-The application is deployed on Vercel. To deploy your own instance:
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Deploy on Vercel**
-   - Go to [Vercel](https://vercel.com)
-   - Import your GitHub repository
-   - Add all environment variables
-   - Deploy!
-
-3. **Update OAuth Redirect URLs**
-   - Update Google OAuth redirect URI to your Vercel URL
-   - Update GitHub OAuth callback URL to your Vercel URL
-   - Update `NEXTAUTH_URL` in Vercel environment variables
-
-## 📝 Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `MONGODB_URI` | MongoDB connection string | ✅ |
-| `NEXTAUTH_SECRET` | Secret for NextAuth.js | ✅ |
-| `NEXTAUTH_URL` | Application URL | ✅ |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | ❌ |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | ❌ |
-| `GITHUB_ID` | GitHub OAuth app ID | ❌ |
-| `GITHUB_SECRET` | GitHub OAuth app secret | ❌ |
-| `NEXT_PUBLIC_URL_ENDPOINT` | ImageKit URL endpoint | ✅ |
-| `NEXT_PUBLIC_PUBLIC_KEY` | ImageKit public key | ✅ |
-| `PRIVATE_KEY` | ImageKit private key | ✅ |
-| `IMAGEKIT_PUBLIC_KEY` | ImageKit public key (duplicate) | ✅ |
-| `IMAGEKIT_PRIVATE_KEY` | ImageKit private key (duplicate) | ✅ |
-
-## 🎯 Features in Detail
-
-### Authentication Flow
-- Users can sign up with email/password or use OAuth providers
-- Protected routes redirect to login with callback URL
-- Session persists across page refreshes
-- Secure password hashing with bcrypt
-
-### Media Upload
-- Drag-and-drop file upload
-- File type validation (images/videos)
-- Size limit: 100MB
-- Automatic thumbnail generation for videos
-- Metadata storage in MongoDB
-
-### Profile Management
-- Update personal information
-- Upload profile picture
-- Track profile completion
-- Real-time updates
-
-### Dashboard
-- View upload statistics
-- Quick access to all features
-- Recent uploads display
-- Responsive grid layout
-
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -254,9 +188,9 @@ This project is open source and available under the [MIT License](LICENSE).
 **Keerthiga**
 
 - Website: [https://clipsify-keerthiga.vercel.app/](https://clipsify-keerthiga.vercel.app/)
-- GitHub: [@keerthiga](https://github.com/keerthiga)
+- GitHub: [@keerthiga](https://github.com/S-D-Keerthiga-Devi)
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - [Next.js](https://nextjs.org/) - The React Framework
 - [Vercel](https://vercel.com/) - Deployment Platform
