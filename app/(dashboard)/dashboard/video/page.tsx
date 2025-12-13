@@ -114,7 +114,7 @@ function VideoPage() {
                 onClick={closeVideoModal}
                 variant="ghost"
                 size="icon"
-                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full z-10"
+                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full z-10 cursor-pointer"
               >
                 <X />
               </Button>

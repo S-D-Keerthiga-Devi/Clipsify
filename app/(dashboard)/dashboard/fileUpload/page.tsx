@@ -341,9 +341,6 @@ const FileUploadpage = () => {
                     <CheckCircle2 className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-white font-medium mb-1">File uploaded successfully!</p>
-                      <p className="text-gray-400 text-sm break-all">
-                        <span className="font-medium">URL:</span> {uploadResponse.url}
-                      </p>
                     </div>
                   </div>
                 </CardContent>

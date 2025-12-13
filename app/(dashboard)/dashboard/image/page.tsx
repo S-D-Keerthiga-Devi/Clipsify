@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { Image as ImageIconLucide, Loader2, X } from 'lucide-react'
-import { Image } from '@imagekit/next'
 import {
   Card,
   CardContent,
@@ -92,19 +91,17 @@ function Imagepage() {
               >
                 <div className="relative overflow-hidden">
                   <div className="w-full bg-gray-900 flex items-center justify-center">
-                    <Image
-                      urlEndpoint="https://ik.imagekit.io/your_imagekit_id"
+                    <img
                       src={image.imageUrl}
                       alt={image.title}
-                      width={image.transformation?.width || 500}
-                      height={image.transformation?.height || 500}
-                      transformation={[
-                        {
-                          width: 500,
-                          // Let ImageKit scale the height automatically to maintain aspect ratio
-                        }
-                      ]}
                       className="w-full h-auto object-contain transition-transform duration-300"
+                      loading="lazy"
+                      onError={(e) => {
+                        // Fallback if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        console.error('Failed to load image:', image.imageUrl);
+                      }}
                     />
                   </div>
                 </div>
@@ -147,7 +144,7 @@ function Imagepage() {
               {/* CLOSE BUTTON */}
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 z-50 transition-colors"
+                className="absolute top-4 right-4 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 z-50 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
