@@ -186,122 +186,136 @@ export default function NavbarMain() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-gray-300 hover:text-white focus:outline-none"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {/* Mobile Actions - Login Button + Menu */}
+          <div className="md:hidden flex items-center gap-3">
+            {!user && (
+              <Button
+                onClick={() => router.push('/login')}
+                className="bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-semibold px-4 py-2 rounded-full text-sm cursor-pointer"
+              >
+                Login
+              </Button>
+            )}
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="text-gray-300 hover:text-white focus:outline-none"
             >
-              {isMobileMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                {isMobileMenuOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu Panel */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-[#0A0A0F]/95 backdrop-blur-xl border-b border-purple-500/20 animate-in slide-in-from-top-2 duration-200">
-          <div className="px-4 py-4 space-y-3">
-            {/* Navigation Links */}
-            <button
-              onClick={() => {
-                if (pathname === '/') {
-                  document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })
-                } else {
-                  router.push('/#features')
-                }
-                setIsMobileMenuOpen(false)
-              }}
-              className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
-            >
-              Features
-            </button>
-            <button
-              onClick={() => {
-                router.push('/about')
-                setIsMobileMenuOpen(false)
-              }}
-              className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
-            >
-              About
-            </button>
-            <button
-              onClick={() => {
-                if (pathname === '/') {
-                  document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })
-                } else {
-                  router.push('/#faq')
-                }
-                setIsMobileMenuOpen(false)
-              }}
-              className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
-            >
-              FAQ
-            </button>
+      {
+        isMobileMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-[#0A0A0F]/95 backdrop-blur-xl border-b border-purple-500/20 animate-in slide-in-from-top-2 duration-200">
+            <div className="px-4 py-4 space-y-3">
+              {/* Navigation Links */}
+              <button
+                onClick={() => {
+                  if (pathname === '/') {
+                    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })
+                  } else {
+                    router.push('/#features')
+                  }
+                  setIsMobileMenuOpen(false)
+                }}
+                className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => {
+                  router.push('/about')
+                  setIsMobileMenuOpen(false)
+                }}
+                className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
+              >
+                About
+              </button>
+              <button
+                onClick={() => {
+                  if (pathname === '/') {
+                    document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })
+                  } else {
+                    router.push('/#faq')
+                  }
+                  setIsMobileMenuOpen(false)
+                }}
+                className="block w-full text-left px-4 py-3 text-gray-300 hover:text-white hover:bg-purple-500/10 rounded-lg transition-colors text-sm font-medium"
+              >
+                FAQ
+              </button>
 
-            {/* Auth Buttons */}
-            <div className="pt-3 border-t border-white/10 space-y-2">
-              {!user ? (
-                <>
-                  <Button
-                    onClick={() => {
-                      router.push('/login')
-                      setIsMobileMenuOpen(false)
-                    }}
-                    variant="ghost"
-                    className="w-full text-gray-300 hover:text-white hover:bg-purple-500/10 justify-start"
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      router.push('/register')
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg shadow-purple-500/30"
-                  >
-                    Sign Up
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    onClick={() => {
-                      router.push('/dashboard/home')
-                      setIsMobileMenuOpen(false)
-                    }}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-                  >
-                    Dashboard
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      signOut()
-                      setIsMobileMenuOpen(false)
-                    }}
-                    variant="ghost"
-                    className="w-full text-red-400 hover:bg-red-500/10 justify-start"
-                  >
-                    Logout
-                  </Button>
-                </>
-              )}
+              {/* Auth Buttons */}
+              <div className="pt-3 border-t border-white/10 space-y-2">
+                {!user ? (
+                  <>
+                    <Button
+                      onClick={() => {
+                        router.push('/login')
+                        setIsMobileMenuOpen(false)
+                      }}
+                      variant="ghost"
+                      className="w-full text-gray-300 hover:text-white hover:bg-purple-500/10 justify-start"
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        router.push('/register')
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg shadow-purple-500/30"
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => {
+                        router.push('/dashboard/home')
+                        setIsMobileMenuOpen(false)
+                      }}
+                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                    >
+                      Dashboard
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        signOut()
+                        setIsMobileMenuOpen(false)
+                      }}
+                      variant="ghost"
+                      className="w-full text-red-400 hover:bg-red-500/10 justify-start"
+                    >
+                      Logout
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </nav>
+        )
+      }
+    </nav >
   )
 }
